@@ -1,9 +1,10 @@
 from movements import app
+from movements.form import MovementForm
 from flask import render_template, request, url_for, redirect
 import csv
 import sqlite3
 
-dbfile = "movements/data/basededatos.db"
+dbfile = app.config['dbfile']
 
 def consulta(query, params=()):
     conn = sqlite3.connect(dbfile)
@@ -63,9 +64,9 @@ def nuevoIngreso():
 
         return redirect(url_for('listaIngresos'))
         
+    
 
-
-    return render_template("alta.html")       
+    return render_template("alta.html", form=format)       
 
 
 @app.route("/modifica/<id>", methods=['GET', 'POST'])

@@ -1,23 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SubmitField, HiddenField, SelectField
-from wtforms.validators import DataRequired, Length, ValidationError, AnyOf, Email
-from wtforms.widgets import TextArea, Select
+from wtforms import IntegerField, DateField, StringField, SubmitField, FloatField
+from wtforms.validators import DataRequired, Length
 
-from datetime import date
+class MovementForm(FlaskForm):
+    id = IntegerField("id")
+    fecha = DateField("fecha", validators=[DataRequired()])
+    concepto = StringField("concepto", validators=[DataRequired(), Length(min=10, message="El concepto debe tener mas de 10 caracteres")])
+    cantidad = FloatField("cantidad", validators=[DataRequired()])
 
-def greater_than_today(form, field):
-    hoy = date.today()
-    if field.data < hoy:
-        raise ValidationError('La fecha debe ser superior o igual a hoy')
-
-
-class TaskForm(FlaskForm):
-    title = StringField('Título', validators=[DataRequired(), Length(min=3, max=15, message="La longitud ha de estar entre 3 y 15")])
-    description = StringField('Descripción', widget=TextArea())
-    fx = DateField('Fecha', validators=[DataRequired(), greater_than_today])
-    id_employee = SelectField('Empleado', coerce=int)
-
-    submit = SubmitField('Enviar')
-
-    def updateChoices(self, mychoices):
-        self.id_employee.choices = mychoices
+    submit = SubmitField("aceptar")
